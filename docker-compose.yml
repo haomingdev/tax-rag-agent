@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: tax_rag_backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile # To be created in P0.3.2
+    ports:
+      - "3001:3001" # Assuming NestJS runs on 3001, adjust if different
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules # Exclude node_modules from host mount for performance
+    depends_on:
+      - redis
+      - weaviate
+    environment:
+      - NODE_ENV=development
+      # Add other backend specific env vars here
+
+  frontend:
+    container_name: tax_rag_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile # To be created in P0.3.2
+    ports:
+      - "3000:3000" # Default Next.js port
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules # Exclude node_modules
+      - /usr/src/app/.next # Exclude .next
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=development
+      # Add other frontend specific env vars here
+
+  weaviate:
+    container_name: tax_rag_weaviate
+    image: semitechnologies/weaviate:1.23.10
+    ports:
+      - "8080:8080"
+      - "50051:50051" # For gRPC if needed
+    volumes:
+      - ./weaviate_data:/var/lib/weaviate # Persist Weaviate data
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'none' # As per project requirements
+      ENABLE_MODULES: '' # Explicitly no modules beyond core
+      CLUSTER_HOSTNAME: 'node1'
+
+  redis:
+    container_name: tax_rag_redis
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data # Persist Redis data
+
+volumes:
+  weaviate_data:
+  redis_data:
