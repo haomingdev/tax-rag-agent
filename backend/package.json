@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "nest build apps/api",
     "start:dev": "nest start -p apps/api/tsconfig.json --watch",
-    "start:prod": "node dist/apps/api/main.js"
+    "start:prod": "node dist/apps/api/main.js",
+    "schema:push": "ts-node script/push-schema.ts"
   },
   "keywords": [],
   "author": "",

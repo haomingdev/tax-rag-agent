@@ -38,4 +38,4 @@ COPY --from=development /usr/src/app/dist ./dist
 EXPOSE 3001
 
 # Define the command to run the application
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/api/main.js"]

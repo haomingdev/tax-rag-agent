@@ -30,17 +30,16 @@ ENV NODE_ENV production
 # Or copy only necessary production files from the builder stage
 RUN npm install -g pnpm@9
 
-# Copy package.json and pnpm-lock.yaml (or just package.json if start script is simple)
-COPY package.json pnpm-lock.yaml* ./
-# Install only production dependencies if needed by the start script, 
-# otherwise, if `pnpm start` is just `next start`, this might not be strictly necessary
-# if all build artifacts are self-contained.
-# For Next.js, it's common to only copy build artifacts.
+COPY package.json ./
+COPY pnpm-lock.yaml* ./
+
+# If you have production-only dependencies, you might uncomment and adjust the next line
+RUN pnpm install --frozen-lockfile --prod
 
 # Copy built assets from the builder stage
+# COPY --from=builder /usr/src/app/package.json ./package.json # Next.js needs package.json to run
 COPY --from=builder /usr/src/app/.next ./.next
-COPY --from=builder /usr/src/app/public ./public # If you have a public folder
-COPY --from=builder /usr/src/app/package.json . # Next.js needs package.json to run
+# COPY --from=builder /usr/src/app/public ./public # If you have a public folder
 
 # Expose the port Next.js runs on
 EXPOSE 3000
