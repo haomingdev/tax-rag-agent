@@ -1,0 +1,163 @@
+TAX RAG System MVP Project Development Protocol (.windsurfrules)
+AI Agent (Cascade) Guidelines
+
+This file sets the ✅ non‑negotiable rules and best practices for building and modifying the Agentic Malaysia Tax RAG System MVP. Follow them to guarantee consistency, maintainability, and stability across the code‑base.
+
+## 1  Project Context
+
+Application: Public chatbot that answers Malaysian‑tax questions, plus a hidden developer ingestion console.
+
+Stack: Next.js 14 (App Router) + Tailwind CSS + Shadcn UI (frontend); NestJS 10 (API, worker, RAG service); LangChain TS 0.2; Weaviate 1.23 vector DB; Google Text Embedding 004 & Gemini 2.5‑pro via Vertex AI.
+
+Architecture: Single repo, Layered monolith → frontend/ (Next.js) and backend/ (NestJS). Ingestion worker and RAG service live inside backend/ packages.
+
+## 2  General Principles
+
+Consistency: Follow existing folder layout, naming, ESLint/Prettier rules, and Tailwind design tokens.
+
+TypeScript‑Strict: noImplicitAny, strictNullChecks ON everywhere. Shared types live in packages/common/src/types.
+
+Single‑Responsibility: Keep every controller, service, and React component laser‑focused; factor helpers into lib/.
+
+Readability > Cleverness: Prefer expressive variable names and short functions; document edge cases inline.
+
+## 3  Backend (NestJS API, Worker, RAG)
+
+### 3.1 Directory Contracts
+
+Path	Purpose
+backend/apps/api/*	REST/SSE controllers, DTO validation
+backend/apps/worker/*	BullMQ queues for ingestion
+backend/libs/rag/*	LangChain pipelines, prompt templates
+backend/libs/db/weaviate.ts	Singleton Weaviate client
+
+### 3.2 Database (Weaviate)
+
+Schema Source of Truth: backend/schema/weaviate-schema.ts only.
+
+Changes:
+
+Update class/property definitions.
+
+npm run schema:push (script hits /v1/schema).
+
+Bump schemaVersion in database.md.
+
+Vectorizer: none – embeddings are supplied from Google 004.
+
+Distance Metric: cosine.
+
+Migrations: If a change breaks backward compatibility, write a one‑off JS migration in backend/migrations/.
+
+### 3.3 API Routes
+
+Route	Auth	Notes
+POST /api/ingest	none	enqueue ingestion job
+POST /api/chat	none	SSE stream answer
+GET /api/docs	none	list/delete docs
+
+Implement DTOs with class-validator and wrap logic in try/catch → HttpException.
+
+### 3.4 Ingestion Worker Rules
+
+Playwright render pages; use pdf-parse for PDFs.
+
+Chunk ≈ 1 000 tokens, 200 overlap.
+
+Batch‑embed via Vertex AI Text Embedding 004 (max 32 per call, retry 2 on 429).
+
+Upsert chunks + metadata to Weaviate in batches of 100.
+
+Always update IngestJob.status (pending|processing|completed|failed).
+
+### 3.5 RAG Pipeline Rules
+
+Embed prompt with Google 004.
+
+Weaviate nearVector topK=8, score ≥ 0.15. 
+
+Build LangChain RetrievalQA with Gemini 2.5‑pro; stream partial tokens.
+
+Must cite ≥ 1 chunk or send fallback.
+
+Total prompt (system + context + user) ≤ 4 000 tokens. 
+
+## 4  Frontend (Next.js 14)
+
+### 4.1 Structure
+
+pgsql
+Copy
+Edit
+frontend/
+  app/                # App Router routes
+    ingest/page.tsx   # Dev ingestion UI
+    chat/page.tsx     # Public chatbot
+  components/
+    ui/               # Shadcn primitives
+    chat/             # ChatMessage, ChatInput
+    ingest/           # IngestForm, IngestTable
+  lib/
+    apiClient.ts      # SWR‑based wrapper
+    useIsMobile.ts
+    
+### 4.2 State & Data
+
+Prefer React Server Components for data‑fetching pages.
+
+Use useSWRImmutable + /api routes for client mutations.
+
+Global state (if any) goes in lightweight Zustand stores inside frontend/lib/stores/.
+
+### 4.3 Styling
+
+Tailwind utility classes only; follow color tokens from design system (DL‑002). 
+
+
+Re‑use Shadcn UI primitives; never fork core component styles.
+
+### 4.4 Rich‑text Rendering
+Use highlight-citations.tsx helper to convert markdown + footnotes into clickable Tailwind prose.
+
+## 5  Testing & Verification (MANDATORY)
+
+⚠️ NEVER mark a task complete without both AI‑side testing and user confirmation.
+
+<thinking> □ Unit tests written/updated (`pnpm test`) – target 80 % coverage. :contentReference[oaicite:18]{index=18}:contentReference[oaicite:19]{index=19} □ E2E happy‑path (`pnpm e2e`) passes (ingest → chat). □ Local run (`pnpm dev`) shows no console/server errors. □ Weaviate schema diff applied successfully. □ Logs in Loki show no `error` level entries. □ Ask user to validate in staging and give “👍 Looks good”. </thinking>
+Only after the user signs off is the task DONE.
+
+## 6  Key Commands (Workspace root)
+
+Command	What it does
+pnpm dev	Runs Next.js + NestJS + Weaviate + Redis (docker‑compose)
+pnpm build	Builds frontend & backend; runs schema:push
+pnpm start	Starts prod build locally
+pnpm schema:push	POST updated schema to Weaviate
+pnpm migrate	Executes JS migrations (if any)
+pnpm test	Jest unit tests
+pnpm e2e	Playwright end‑to‑end tests
+
+## 7  Critical Reminders
+
+✅ Embeddings: Google Text Embedding 004 only – keep version pinned.
+
+✅ Vector DB: Weaviate schema is canonical; update, push, verify.
+
+✅ Prompt Budget: ≤ 4 k tokens; stream answers.
+
+✅ Security: HTTPS, rate‑limit /api/ingest 10 req/min IP. 
+
+✅ Cost: Keep average answer cost ≤ USD 0.002. 
+
+
+⛔️ NO Un‑tested Code: Every PR must include or update tests.
+
+⛔️ NO PII Storage: Logs must redact IPs and expire after 90 days. 
+
+
+⛔️ NEVER Skip User Sign‑off: User validation is the last gate.
+
+End of .windsurfrules
+
+
+Sources
