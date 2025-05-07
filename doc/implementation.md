@@ -4,127 +4,238 @@ This document outlines the phased, step-by-step implementation plan for the Agen
 
 ## Phase 0: Project Setup & Foundation
 
--   [ ] **P0.1: Repository & Monorepo Setup**
-    -   [ ] P0.1.1: Initialize Git repository.
-    -   [ ] P0.1.2: Set up monorepo structure (e.g., using pnpm workspaces or similar).
-        -   [ ] P0.1.2.1: Create `backend/` directory.
-        -   [ ] P0.1.2.2: Create `frontend/` directory.
-        -   [ ] P0.1.2.3: Create `packages/common/` for shared types/libs.
--   [ ] **P0.2: Core Dependencies & Tooling**
-    -   [ ] P0.2.1: Install Node.js (v20) and pnpm.
-    -   [ ] P0.2.2: Initialize `package.json` in root and sub-packages.
-    -   [ ] P0.2.3: Install backend core dependencies (NestJS 10, LangChain TS 0.2, Weaviate client, BullMQ).
-    -   [ ] P0.2.4: Install frontend core dependencies (Next.js 14, React 18, Tailwind CSS 3, Shadcn UI, SWR).
-    -   [ ] P0.2.5: Set up TypeScript strict mode across all packages.
-    -   [ ] P0.2.6: Configure ESLint and Prettier, integrate with IDE.
-    -   [ ] P0.2.7: Add basic `.gitignore` and `.prettierignore`.
--   [ ] **P0.3: Local Development Environment (Docker)**
-    -   [ ] P0.3.1: Create `docker-compose.yml` for local development.
-        -   [ ] P0.3.1.1: Define service for NestJS backend.
-        -   [ ] P0.3.1.2: Define service for Next.js frontend.
-        -   [ ] P0.3.1.3: Define service for Weaviate 1.23.
-        -   [ ] P0.3.1.4: Define service for Redis (for BullMQ).
-        -   [ ] P0.3.1.5: (Optional for local dev) Define services for Loki & Grafana.
-    -   [ ] P0.3.2: Create Dockerfiles for backend and frontend services.
-    -   [ ] P0.3.3: Add `pnpm dev` script to start all services via `docker-compose up`.
--   [ ] **P0.4: Project Guidelines & Documentation**
-    -   [ ] P0.4.1: Finalize and commit `.windsurfrules`.
-    -   [ ] P0.4.2: Ensure PRD, Tech Spec, DB Schema, FSD are up-to-date and accessible.
-    -   [ ] P0.4.3: Create `README.md` with setup and contribution guidelines.
+-   [X] **P0.1: Repository & Monorepo Setup**
+    -   [X] P0.1.1: Initialize Git repository.
+    -   [X] P0.1.2: Set up monorepo structure (e.g., using pnpm workspaces or similar).
+        -   [X] P0.1.2.1: Create `backend/` directory.
+        -   [X] P0.1.2.2: Create `frontend/` directory.
+        -   [X] P0.1.2.3: Create `packages/common/` for shared types/libs.
+-   [X] **P0.2: Core Dependencies & Tooling**
+    -   [X] P0.2.1: Install Node.js (v20) and pnpm.
+    -   [X] P0.2.2: Initialize `package.json` in root and sub-packages.
+    -   [X] P0.2.3: Install backend core dependencies (NestJS 10, LangChain TS 0.2, Weaviate client, BullMQ).
+    -   [X] P0.2.4: Install frontend core dependencies (Next.js 14, React 18, Tailwind CSS 3, Shadcn UI, SWR).
+    -   [X] P0.2.5: Set up TypeScript strict mode across all packages.
+    -   [X] P0.2.6: Configure ESLint and Prettier, integrate with IDE.
+    -   [X] P0.2.7: Add basic `.gitignore` and `.prettierignore`.
+-   [X] **P0.3: Local Development Environment (Docker)**
+    -   [X] P0.3.1: Create `docker-compose.yml` for local development.
+        -   [X] P0.3.1.1: Define service for NestJS backend.
+        -   [X] P0.3.1.2: Define service for Next.js frontend.
+        -   [X] P0.3.1.3: Define service for Weaviate 1.23.
+        -   [X] P0.3.1.4: Define service for Redis (for BullMQ).
+        -   [X] P0.3.1.5: (Optional for local dev) Define services for Loki & Grafana.
+    -   [X] P0.3.2: Create Dockerfiles for backend and frontend services.
+    -   [X] P0.3.3: Add `pnpm dev` script to start all services via `docker-compose up`.
+-   [X] **P0.4: Project Guidelines & Documentation**
+    -   [X] P0.4.1: Finalize and commit `.windsurfrules`.
+    -   [X] P0.4.2: Ensure PRD, Tech Spec, DB Schema, FSD are up-to-date and accessible.
+    -   [X] P0.4.3: Create `README.md` with setup and contribution guidelines.
 
 ## Phase 1: Backend - Core API & Weaviate Integration
 
--   [ ] **P1.1: NestJS API Application Setup (`backend/apps/api`)**
-    -   [ ] P1.1.1: Generate NestJS application for the API gateway.
-    -   [ ] P1.1.2: Configure basic modules, controllers, services structure.
-    -   [ ] P1.1.3: Implement a basic health check endpoint (e.g., `GET /api/health`).
--   [ ] **P1.2: Weaviate Schema & Client**
-    -   [ ] P1.2.1: Define Weaviate schema in `backend/schema/weaviate-schema.ts` (for `IngestJob`, `RawDoc`, `DocChunk`, `ChatInteraction` classes as per `database.md`).
-    -   [ ] P1.2.2: Create `pnpm schema:push` script to apply schema to Weaviate instance.
+-   [X] **P1.1: NestJS API Application Setup (`backend/apps/api`)**
+    -   [X] P1.1.1: Generate NestJS application for the API gateway.
+    -   [X] P1.1.2: Configure basic modules, controllers, services structure.
+    -   [X] P1.1.3: Implement a basic health check endpoint (e.g., `GET /api/health`).
+-   [X] **P1.2: Weaviate Schema & Client**
+    -   [X] P1.2.1: Define Weaviate schema in `backend/schema/weaviate-schema.ts` (for `IngestJob`, `RawDoc`, `DocChunk`, `ChatInteraction` classes as per `database.md`).
+    -   [X] P1.2.2: Create `pnpm schema:push` script to apply schema to Weaviate instance.
     -   [ ] P1.2.3: Implement Weaviate client singleton service in `backend/libs/db/weaviate.ts`.
+        -   [ ] P1.2.3.1: Write Jest unit tests for the Weaviate client service.
+        -   [ ] P1.2.3.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P1.2.4: Implement schema creation/validation logic on backend startup.
+        -   [ ] P1.2.4.1: Write Jest unit tests for schema creation/validation logic.
+        -   [ ] P1.2.4.2: Run `pnpm test` to ensure unit tests pass.
+    -   [ ] **P1.2.T: Testing & Verification (as per .windsurfrules)**
+        -   [ ] P1.2.T.1: Unit tests written/updated (`pnpm test`) – target 80 % coverage.
+        -   [ ] P1.2.T.2: Local run (`pnpm dev`) shows no console/server errors.
+        -   [ ] P1.2.T.3: Weaviate schema diff applied successfully.
+        -   [ ] P1.2.T.4: Logs in Loki show no `error` level entries.
+        -   [ ] P1.2.T.5: Ask user to validate in staging and give “👍 Looks good”.
 -   [ ] **P1.3: Shared Types**
     -   [ ] P1.3.1: Define core DTOs and entity types in `packages/common/src/types`.
+        -   [ ] P1.3.1.1: (If applicable) Write Jest unit tests for any complex type validation/transformation logic.
+        -   [ ] P1.3.1.2: Run `pnpm test` to ensure unit tests pass.
+    -   [ ] **P1.3.T: Testing & Verification (as per .windsurfrules)**
+        -   [ ] P1.3.T.1: Unit tests written/updated (`pnpm test`).
+        -   [ ] P1.3.T.2: Local run (`pnpm dev`) shows no console/server errors.
+        -   [ ] P1.3.T.3: Ask user to validate in staging and give “👍 Looks good”.
 
 ## Phase 2: Backend - Ingestion Worker (`COMP-WORK-001`)
 
 -   [ ] **P2.1: NestJS Worker Application Setup (`backend/apps/worker`)**
     -   [ ] P2.1.1: Generate NestJS application for the ingestion worker.
     -   [ ] P2.1.2: Configure BullMQ module with Redis connection.
+        -   [ ] P2.1.2.1: Write Jest unit tests for BullMQ configuration and connection logic.
+        -   [ ] P2.1.2.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.1.3: Define ingestion queue and processor(s).
+        -   [ ] P2.1.3.1: Write Jest unit tests for queue definition and basic processor structure.
+        -   [ ] P2.1.3.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P2.2: Ingestion Job Management**
     -   [ ] P2.2.1: Implement DTOs for `POST /api/ingest` request.
     -   [ ] P2.2.2: Implement `POST /api/ingest` endpoint in API app to validate input and enqueue job to BullMQ.
+        -   [ ] P2.2.2.1: Write Jest unit tests for DTO validation and job enqueuing logic.
+        -   [ ] P2.2.2.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.2.3: Implement logic in worker to update `IngestJob.status` in Weaviate (`pending`, `processing`, `completed`, `failed`).
+        -   [ ] P2.2.3.1: Write Jest unit tests for `IngestJob.status` update logic.
+        -   [ ] P2.2.3.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P2.3: Document Fetching & Parsing**
     -   [ ] P2.3.1: Integrate Playwright for fetching and rendering web page content.
+        -   [ ] P2.3.1.1: Write Jest unit tests for basic Playwright integration (mocking actual page fetches).
+        -   [ ] P2.3.1.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.3.2: Integrate `article-extractor` (or similar) for main content extraction from HTML.
+        -   [ ] P2.3.2.1: Write Jest unit tests for `article-extractor` integration.
+        -   [ ] P2.3.2.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.3.3: Integrate `pdf-parse` for extracting text from PDF files.
+        -   [ ] P2.3.3.1: Write Jest unit tests for `pdf-parse` integration.
+        -   [ ] P2.3.3.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.3.4: Implement logic to differentiate URL types (web page vs. PDF link).
+        -   [ ] P2.3.4.1: Write Jest unit tests for URL type differentiation logic.
+        -   [ ] P2.3.4.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P2.4: Text Chunking**
     -   [ ] P2.4.1: Implement text chunking logic (approx. 700-1000 tokens, 100-200 token overlap).
+        -   [ ] P2.4.1.1: Write Jest unit tests for text chunking logic.
+        -   [ ] P2.4.1.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P2.5: Embedding Generation**
     -   [ ] P2.5.1: Set up Google Vertex AI client for Text Embedding 004.
+        -   [ ] P2.5.1.1: Write Jest unit tests for Vertex AI client setup (mocking API calls).
+        -   [ ] P2.5.1.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.5.2: Implement embedding generation for text chunks (batching up to 32 chunks per API call).
+        -   [ ] P2.5.2.1: Write Jest unit tests for embedding generation and batching logic.
+        -   [ ] P2.5.2.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.5.3: Implement retry mechanism for Vertex AI API calls (e.g., on 429 errors).
+        -   [ ] P2.5.3.1: Write Jest unit tests for retry mechanism.
+        -   [ ] P2.5.3.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P2.6: Weaviate Upsert**
     -   [ ] P2.6.1: Implement logic to upsert `RawDoc` and `DocChunk` objects (with embeddings) to Weaviate.
+        -   [ ] P2.6.1.1: Write Jest unit tests for Weaviate upsert logic.
+        -   [ ] P2.6.1.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.6.2: Implement batching for Weaviate upserts (e.g., 100 objects per batch).
+        -   [ ] P2.6.2.1: Write Jest unit tests for Weaviate batching logic.
+        -   [ ] P2.6.2.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P2.7: Error Handling in Worker**
     -   [ ] P2.7.1: Implement robust error handling throughout the ingestion pipeline.
+        -   [ ] P2.7.1.1: Write Jest unit tests for error handling mechanisms.
+        -   [ ] P2.7.1.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P2.7.2: Ensure `IngestJob.errorMessage` is populated on failure.
+        -   [ ] P2.7.2.1: Write Jest unit tests to verify `IngestJob.errorMessage` population.
+        -   [ ] P2.7.2.2: Run `pnpm test` to ensure unit tests pass.
+-   [ ] **P2.T: Testing & Verification (as per .windsurfrules)**
+    -   [ ] P2.T.1: Unit tests written/updated (`pnpm test`) – target 80 % coverage.
+    -   [ ] P2.T.2: E2E happy-path (`pnpm e2e`) for ingestion passes.
+    -   [ ] P2.T.3: Local run (`pnpm dev`) shows no console/server errors.
+    -   [ ] P2.T.4: Weaviate schema diff applied successfully.
+    -   [ ] P2.T.5: Logs in Loki show no `error` level entries.
+    -   [ ] P2.T.6: Ask user to validate in staging and give “👍 Looks good”.
 
 ## Phase 3: Backend - RAG Service & Chat API (`COMP-RAG-001`)
 
 -   [ ] **P3.1: LangChain RAG Service Setup (`backend/libs/rag`)**
     -   [ ] P3.1.1: Initialize LangChain TS components.
     -   [ ] P3.1.2: Set up Google Vertex AI client for Gemini 2.5-pro.
+        -   [ ] P3.1.2.1: Write Jest unit tests for Gemini client setup (mocking API calls).
+        -   [ ] P3.1.2.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P3.2: RAG Pipeline Implementation**
     -   [ ] P3.2.1: Implement user query embedding (using Google Text Embedding 004).
+        -   [ ] P3.2.1.1: Write Jest unit tests for query embedding logic.
+        -   [ ] P3.2.1.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P3.2.2: Implement Weaviate `nearVector` search for relevant `DocChunk`s (topK=8, score ≥ 0.15).
+        -   [ ] P3.2.2.1: Write Jest unit tests for Weaviate search logic.
+        -   [ ] P3.2.2.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P3.2.3: Implement prompt templating/construction for Gemini, including retrieved context.
+        -   [ ] P3.2.3.1: Write Jest unit tests for prompt templating.
+        -   [ ] P3.2.3.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P3.2.4: Integrate LangChain `RetrievalQA` chain (or equivalent custom chain) with Gemini for answer generation.
+        -   [ ] P3.2.4.1: Write Jest unit tests for `RetrievalQA` chain integration and answer generation.
+        -   [ ] P3.2.4.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P3.2.5: Ensure total prompt token count is managed (≤ 4000 tokens).
+        -   [ ] P3.2.5.1: Write Jest unit tests for token count management logic.
+        -   [ ] P3.2.5.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P3.2.6: Implement logic for citation generation (linking answers to source `DocChunk`s).
+        -   [ ] P3.2.6.1: Write Jest unit tests for citation generation logic.
+        -   [ ] P3.2.6.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P3.2.7: Implement fallback mechanism if no relevant chunks found or if LLM fails to generate a suitable answer.
+        -   [ ] P3.2.7.1: Write Jest unit tests for fallback mechanism.
+        -   [ ] P3.2.7.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P3.3: Chat API Endpoint (`POST /api/chat`)**
     -   [ ] P3.3.1: Implement DTOs and validation for chat requests (prompt length 1-512).
     -   [ ] P3.3.2: Implement `POST /api/chat` endpoint in API app using Server-Sent Events (SSE) for streaming responses.
+        -   [ ] P3.3.2.1: Write Jest unit tests for DTO validation and SSE streaming logic.
+        -   [ ] P3.3.2.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P3.3.3: Integrate RAG pipeline with the chat endpoint.
+        -   [ ] P3.3.3.1: Write Jest unit tests for RAG pipeline integration.
+        -   [ ] P3.3.3.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P3.4: Chat Interaction Logging**
     -   [ ] P3.4.1: Implement logic to log chat interactions (prompt, answer, citations, timestamp) to Weaviate `ChatInteraction` class.
+        -   [ ] P3.4.1.1: Write Jest unit tests for chat interaction logging logic.
+        -   [ ] P3.4.1.2: Run `pnpm test` to ensure unit tests pass.
+-   [ ] **P3.T: Testing & Verification (as per .windsurfrules)**
+    -   [ ] P3.T.1: Unit tests written/updated (`pnpm test`) – target 80 % coverage.
+    -   [ ] P3.T.2: E2E happy-path (`pnpm e2e`) for chat passes.
+    -   [ ] P3.T.3: Local run (`pnpm dev`) shows no console/server errors.
+    -   [ ] P3.T.4: Weaviate schema diff applied successfully.
+    -   [ ] P3.T.5: Logs in Loki show no `error` level entries.
+    -   [ ] P3.T.6: Ask user to validate in staging and give “👍 Looks good”.
 
 ## Phase 4: Frontend - Basic Structure & UI Components
 
 -   [ ] **P4.1: Next.js App Router Setup**
     -   [ ] P4.1.1: Configure basic routing structure in `frontend/app/`.
     -   [ ] P4.1.2: Implement main layout component(s).
+        -   [ ] P4.1.2.1: Write Jest/RTL unit tests for layout components.
+        -   [ ] P4.1.2.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P4.2: Styling and UI Primitives**
     -   [ ] P4.2.1: Set up Tailwind CSS configuration, including design tokens (DL-002).
     -   [ ] P4.2.2: Integrate Shadcn UI and import necessary primitives.
 -   [ ] **P4.3: Shared Frontend Libraries/Hooks**
     -   [ ] P4.3.1: Create `apiClient.ts` using SWR for backend API communication.
+        -   [ ] P4.3.1.1: Write Jest unit tests for `apiClient.ts` (mocking fetch/SWR).
+        -   [ ] P4.3.1.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P4.3.2: Implement `useIsMobile.ts` hook (if needed for responsive design).
+        -   [ ] P4.3.2.1: Write Jest unit tests for `useIsMobile.ts` hook.
+        -   [ ] P4.3.2.2: Run `pnpm test` to ensure unit tests pass.
 -   [ ] **P4.4: Core UI Components**
     -   [ ] P4.4.1: Develop common UI components (e.g., `Button`, `Input`, `Card`, `Modal`, `Toast/Notification`).
+        -   [ ] P4.4.1.1: Write Jest/RTL unit tests for each core UI component.
+        -   [ ] P4.4.1.2: Run `pnpm test` to ensure unit tests pass.
+-   [ ] **P4.T: Testing & Verification (as per .windsurfrules)**
+    -   [ ] P4.T.1: Unit tests written/updated (`pnpm test`) – target 80 % coverage for components.
+    -   [ ] P4.T.2: Local run (`pnpm dev`) shows no console/server errors.
+    -   [ ] P4.T.3: Ask user to validate in staging and give “👍 Looks good”.
 
 ## Phase 5: Frontend - Developer Ingestion Page (`FEAT-001`)
 
 -   [ ] **P5.1: Ingestion Page UI (`frontend/app/ingest/page.tsx`)**
     -   [ ] P5.1.1: Create the main page component for developer ingestion.
+        -   [ ] P5.1.1.1: Write Jest/RTL unit tests for the main ingestion page component.
+        -   [ ] P5.1.1.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P5.1.2: Develop `IngestForm` component:
         -   [ ] P5.1.2.1: Input field for URL.
         -   [ ] P5.1.2.2: (If supporting direct PDF upload) File input for PDF.
         -   [ ] P5.1.2.3: Submit button.
+        -   [ ] P5.1.2.4: Write Jest/RTL unit tests for `IngestForm` component.
+        -   [ ] P5.1.2.5: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P5.1.3: Integrate `apiClient.ts` to call `POST /api/ingest`.
     -   [ ] P5.1.4: Implement UI feedback for ingestion status (e.g., loading indicators, success/error toasts).
 -   [ ] **P5.2: Ingested Documents List & Management (`FUNC-008`)**
     -   [ ] P5.2.1: Implement `GET /api/docs` endpoint in backend API to list ingested `RawDoc` metadata from Weaviate.
+        -   [ ] P5.2.1.1: Write Jest unit tests for `GET /api/docs` endpoint.
+        -   [ ] P5.2.1.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P5.2.2: Develop `IngestTable` component on frontend to display list of ingested documents.
         -   [ ] P5.2.2.1: Display metadata like title, source URL, status, ingestion date.
         -   [ ] P5.2.2.2: Include a delete action for each document.
+        -   [ ] P5.2.2.3: Write Jest/RTL unit tests for `IngestTable` component.
+        -   [ ] P5.2.2.4: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P5.2.3: Implement `DELETE /api/docs/{docId}` endpoint in backend API to remove `RawDoc` and associated `DocChunk`s from Weaviate.
+        -   [ ] P5.2.3.1: Write Jest unit tests for `DELETE /api/docs/{docId}` endpoint.
+        -   [ ] P5.2.3.2: Run `pnpm test` to ensure unit tests pass.
     -   [ ] P5.2.4: Connect delete action in `IngestTable` to the `DELETE /api/docs/{docId}` API.
+-   [ ] **P5.T: Testing & Verification (as per .windsurfrules)**
+    -   [ ] P5.T.1: Unit tests written/updated (`pnpm test`) – target 80 % coverage.
+    -   [ ] P5.T.2: E2E happy-path (`pnpm e2e`) for ingestion page functionality passes.
+    -   [ ] P5.T.3: Local run (`pnpm dev`) shows no console/server errors.
+    -   [ ] P5.T.4: Ask user to validate in staging and give “👍 Looks good”.
 
 ## Phase 6: Frontend - Public Chatbot Interface (`FEAT-002`)
 
